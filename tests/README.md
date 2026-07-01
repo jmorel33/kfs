@@ -25,7 +25,7 @@ Or run the binary directly:
 
 Default output is **grouped by phase/module** (H0–H7) with per-module pass counts. Library INFO/ERROR trace is suppressed during each test for readability; use `--verbose` when debugging a failure.
 
-**Performance (H7)** runs as part of default `make test` (after correctness). `test-perf` syncs props automatically. For perf only:
+**Performance (H7)** runs as part of default `make test` (after correctness). Captured CRT vs MyBuddy metrics: [`../doc/PERFORMANCE.md`](../doc/PERFORMANCE.md). `test-perf` syncs props automatically. For perf only:
 
 ```bat
 mingw32-make test-perf
