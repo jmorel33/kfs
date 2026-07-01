@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="doc/kfs_logo.jpg">
+    <img src="doc/kfs_logo.jpg" alt="Kaizen Filing System" width="360"/>
+  </a>
+</p>
+
 # Kaizen Filing System (KFS)
 
 **Version 2.3.0** · MIT License · (c) 2025–2026 Jacques Morel
@@ -27,6 +33,22 @@ Call `kfs_mem_init()` before any KFS or `sqlite3_*` use if SQLite is shared outs
 
 ---
 
+## Performance (tested)
+
+H7 harness on vendored props (`--perf-iters 100`, Windows 10 / mingw64, 2026-06-30). Full tables: **[doc/PERFORMANCE.md](doc/PERFORMANCE.md)**.
+
+| Workload | CRT p95 | MyBuddy profile C p95 | Improvement |
+|----------|---------|----------------------|-------------|
+| Small blob read (340 KB) | 1.58 ms | 1.14 ms | **−28%** |
+| Large blob read (~10 MB) | 17–18 ms | 13.9 ms | **−21–23%** |
+| Load by topic (models) | 36.9 ms | 21.7 ms | **−41%** |
+| Load by epic (geometry) | 49.5 ms | 26.8 ms | **−46%** |
+| Bulk ingest (34 MB corpus) | 375 ms mean | 365 ms mean | **−3%** (parity) |
+
+Default **`libkfs.a`** (CRT): **55/55** including H7. Optional **`libkfs_mybuddy.a`**: **11/11** H7 green; read-heavy paths ~25–40% faster; ingest at parity.
+
+---
+
 ## Documentation
 
 Full documentation lives in **[doc/](doc/)**. Start with the index:
@@ -36,6 +58,7 @@ Full documentation lives in **[doc/](doc/)**. Start with the index:
 | [**doc/README.md**](doc/README.md) | Documentation index |
 | [**doc/kfs_guide.md**](doc/kfs_guide.md) | Security model — actors, domains, permissions |
 | [**doc/architecture.md**](doc/architecture.md) | Internal design — databases, code layout, memory |
+| [**doc/PERFORMANCE.md**](doc/PERFORMANCE.md) | Tested H7 metrics — CRT vs MyBuddy profile C |
 | [**doc/COMPILATION_GUIDE.md**](doc/COMPILATION_GUIDE.md) | Build, link, include paths, make targets |
 | [**doc/test_harness_plan.md**](doc/test_harness_plan.md) | Test harness — H0–H7 (55 tests) |
 | [**doc/memory_alloc_plan.md**](doc/memory_alloc_plan.md) | Unified memory — production sign-off, MyBuddy perf study |
