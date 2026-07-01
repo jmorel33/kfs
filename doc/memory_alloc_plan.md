@@ -276,6 +276,8 @@ Remaining non-blockers (documented, not failures): lookaside/mmap outside vtable
 
 ## 10. M7 performance study — MyBuddy profile C (2026-06-30)
 
+**Canonical metrics (core doc):** [PERFORMANCE.md](PERFORMANCE.md) — full CRT / profile C / M0 tables, throughput, reproduce steps.
+
 **Setup:** Windows 10, MSYS2 mingw64, H7 `--perf-iters 100`, props synced. Three backends:
 
 | Backend | Library | MyBuddy config |
@@ -294,6 +296,7 @@ Remaining non-blockers (documented, not failures): lookaside/mmap outside vtable
 | blob_read_medium | 4.29 ms | 3.28 ms | **−24%** | 2.69 ms | 2.33 ms | **−13%** |
 | blob_read_large_glb | 17.7 ms | 13.9 ms | **−21%** | 12.6 ms | 9.28 ms | **−26%** |
 | blob_read_large_wav | 18.0 ms | 13.9 ms | **−23%** | 13.6 ms | 9.94 ms | **−27%** |
+| load_by_topic_textures | 7.22 ms | 5.03 ms | **−30%** | 5.00 ms | 3.67 ms | **−27%** |
 | load_by_topic_models | 36.9 ms | 21.7 ms | **−41%** | 27.0 ms | 18.3 ms | **−32%** |
 | load_by_epic_geometry | 49.5 ms | 26.8 ms | **−46%** | 30.6 ms | 19.3 ms | **−37%** |
 | blob_ingest_large | — | — | — | 58.3 ms | 56.6 ms | **−3%** |

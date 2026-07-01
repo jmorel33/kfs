@@ -330,7 +330,7 @@ OOM at cap: alloc/realloc return `NULL`; optional `kfs_mem_set_oom_callback()`. 
 
 - **Impl / API outputs:** allocate with `KFS_*`; caller frees API-returned pointers with `kfs_mem_free()` (or entity helpers that call it).
 - **Macro overrides:** define `KFS_MALLOC` etc. before `#include "kfs_mem.h"` — changes impl only; SQLite still uses `kfs_mem_*` unless the CRT backend island is swapped (see `kfs_mem.h`).
-- **Standalone (D7):** no `SIT_MALLOC` / Situation headers. Optional **production MyBuddy:** `-DKFS_MEM_USE_MYBUDDY` → `libkfs_mybuddy.a` with profile C (`MBD_FLAG_BUDDY_LARGE`, 256 MiB pool). H7 bench: ~25–40% faster reads vs CRT; ingest parity (see `memory_alloc_plan.md` §10).
+- **Standalone (D7):** no `SIT_MALLOC` / Situation headers. Optional **production MyBuddy:** `-DKFS_MEM_USE_MYBUDDY` → `libkfs_mybuddy.a` with profile C (`MBD_FLAG_BUDDY_LARGE`, 256 MiB pool). H7 bench: ~21–46% faster read p95 vs CRT; ingest parity — see [PERFORMANCE.md](PERFORMANCE.md).
 
 ### 9.5 SQLite heap exceptions (not in vtable)
 
@@ -354,6 +354,17 @@ Optional tuning (`SQLITE_CONFIG_LOOKASIDE`, `PRAGMA cache_size`) is embedder res
 | Vtable roundtrip | H0 `mem_roundtrip`, `mem_roundup_matches_sqlite` |
 | Integrity under custom alloc | H0 `integrity_custom_alloc` |
 | Heap cap / open-DB cap | H0 `mem_limit_triggers_oom`, `open_db_cap` |
+
+### 9.7 Tested performance (H7)
+
+Measured on Windows 10 / mingw64, `--perf-iters 100`, vendored props corpus. Canonical tables: **[PERFORMANCE.md](PERFORMANCE.md)**.
+
+| Backend | Library | H7 gate | Read p95 vs CRT |
+|---------|---------|---------|-----------------|
+| CRT (default) | `libkfs.a` | 11/11 (in 55/55 suite) | baseline |
+| MyBuddy profile C | `libkfs_mybuddy.a` | 11/11 | **−21% to −46%** on blob/topic/epic loads |
+
+Example CRT → profile C p95: `blob_read_small` 1.58 ms → 1.14 ms; `load_by_epic_geometry` 49.5 ms → 26.8 ms. Ingest/bulk mean within ~3%. Logs: `doc/done/mem_alloc_*_perf*.log`.
 
 ---
 
@@ -475,7 +486,7 @@ Alternatively, `kfs_create_god_user` automates steps 2–4 when no admin exists.
 | **Link smoke** | `kfs_link_check.exe` links `libkfs.a` |
 | **Runtime harness** | **55/55** — [test_harness_plan.md](test_harness_plan.md) H0–H7 (44 correctness + 11 perf) |
 | **Memory plan** | [memory_alloc_plan.md](memory_alloc_plan.md) — signed off M8 (2026-06-30) |
-| **Perf baseline** | H7 p95 vs M0 log in `doc/done/mem_alloc_baseline_perf.log` (informal ≤10% gate) |
+| **Perf metrics** | [PERFORMANCE.md](PERFORMANCE.md) — CRT vs MyBuddy profile C; M0 baseline in `doc/done/mem_alloc_baseline_perf.log` |
 | **Split gate** | Post-S5 full suite; baseline logged in `doc/done/split_baseline_test.log` |
 
 ---
@@ -490,6 +501,7 @@ Alternatively, `kfs_create_god_user` automates steps 2–4 when no admin exists.
 | [test_harness_plan.md](test_harness_plan.md) | Runtime test phases |
 | [done/refactor_plan.md](done/refactor_plan.md) | `lib_kfs.h` refactor + impl split (archived) |
 | [done/impl_split_plan.md](done/impl_split_plan.md) | Monolith → fwd/core/auth/lc migration (archived) |
+| [PERFORMANCE.md](PERFORMANCE.md) | Tested H7 latency and throughput (CRT vs MyBuddy) |
 | [memory_alloc_plan.md](memory_alloc_plan.md) | Unified heap migration (M0–M8, complete) |
 | [`../../../doc/plan/AAA_ARCHITECTURE_PLAN.md`](../../../doc/plan/AAA_ARCHITECTURE_PLAN.md) | Situation-wide KFS integration roadmap |
 

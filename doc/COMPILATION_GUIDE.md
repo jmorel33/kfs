@@ -119,7 +119,21 @@ mingw32-make test-mybuddy         REM H0 on MyBuddy
 mingw32-make test-mybuddy-perf-c  REM H7 perf (profile C)
 ```
 
-Default `make build` / `make test` remain CRT-backed (**55/55**). Perf study: `doc/memory_alloc_plan.md` §10.
+Default `make build` / `make test` remain CRT-backed (**55/55**).
+
+### Tested performance (H7)
+
+Full metrics: **[PERFORMANCE.md](PERFORMANCE.md)**. Summary (2026-06-30, `--perf-iters 100`):
+
+| Test | CRT p95 | Profile C p95 |
+|------|---------|---------------|
+| `blob_read_small` | 1.58 ms | 1.14 ms |
+| `blob_read_large_glb` | 17.7 ms | 13.9 ms |
+| `load_by_topic_models` | 36.9 ms | 21.7 ms |
+| `load_by_epic_geometry` | 49.5 ms | 26.8 ms |
+| `bulk_ingest_all_props` (mean) | 375 ms | 365 ms |
+
+Migration context: [memory_alloc_plan.md](memory_alloc_plan.md) §10.
 
 ---
 

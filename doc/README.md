@@ -6,6 +6,7 @@
 |----------|-------------|
 | [architecture.md](architecture.md) | Internal design — databases, permissions, code layout |
 | [COMPILATION_GUIDE.md](COMPILATION_GUIDE.md) | Build, link, include paths, make targets |
+| [PERFORMANCE.md](PERFORMANCE.md) | **Tested H7 metrics** — CRT vs MyBuddy profile C (p95, mean, MB/s) |
 | [kfs_guide.md](kfs_guide.md) | Security model manual (v2.3) |
 | [test_harness_plan.md](test_harness_plan.md) | Test harness — H0–H7 (55 tests); H8 Situation integration planned |
 | [clone_plan.md](clone_plan.md) | Clone & lineage — backtrack, registry, change advisory (planned) |
