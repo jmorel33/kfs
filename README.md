@@ -1,6 +1,6 @@
 <p align="center">
   <a href="doc/kfs_logo.jpg">
-    <img src="doc/kfs_logo.jpg" alt="Kaizen Filing System" width="960"/>
+    <img src="doc/kfs_logo.jpg" alt="Kaizen Filing System" width="1024"/>
   </a>
 </p>
 
